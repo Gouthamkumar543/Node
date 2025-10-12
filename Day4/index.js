@@ -24,13 +24,13 @@ const server = http.createServer((req, res) => {
         if (req.method === "GET") {
             let users = readFile()
             // console.log(users);
-            if (req.method === "GET" && query.id) {
+            if (query.id) {
                 const filteredData = users.filter(x => x.id === Number(query.id))
                 res.writeHead(200, { "content-type": "application/json" })
                 res.write(JSON.stringify(filteredData))
                 return res.end()
             }
-            if (req.method === "GET" && query.age) {
+            if (query.age) {
                 const filteredData = users.filter(x => x.age === Number(query.age))
                 res.writeHead(200, { "content-type": "application/json" })
                 res.write(JSON.stringify(filteredData))

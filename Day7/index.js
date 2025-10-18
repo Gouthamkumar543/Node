@@ -48,18 +48,35 @@ app.post("/users", (req, res) => {
     }
 })
 
-app.delete("/users/:name",(req,res)=>{
+app.delete("/users/:name", (req, res) => {
     const userName = req.params.name
     let data = readFile()
-    const filteredData = data.users.filter(x=>x.name.toLowerCase() !== userName.toLowerCase())
+    const filteredData = data.users.filter(x => x.name.toLowerCase() !== userName.toLowerCase())
 
-    if(data.users.length === filteredData.length){
+    if (data.users.length === filteredData.length) {
         return res.status(404).send("No user found to delete")
     }
 
     data.users = filteredData
     writeFile(data)
     res.status(200).send("User deleted sucessfully")
+})
+
+app.put("/users/:name", (req, res) => {
+    const userName = req.params.name
+    let updatedUser = req.body
+    let data = readFile()
+    const index = data.users.findIndex(x => x.name === userName)
+    console.log(index);
+
+    if (index === -1) {
+        return res.status(404).send("No user found")
+    }
+
+    updatedUser.id = data.users[index].id
+    data.users[index] = updatedUser
+    writeFile(data)
+    res.status(201).send("Updated sucessfully")
 })
 
 app.get("/admins", (req, res) => {
@@ -93,18 +110,34 @@ app.post("/admins", (req, res) => {
     }
 })
 
-app.delete("/admins/:name",(req,res)=>{
+app.delete("/admins/:name", (req, res) => {
     const adminName = req.params.name
     let data = readFile()
-    const filteredData = data.admins.filter(x=>x.name.toLowerCase() !== adminName.toLowerCase())
-    
-    if(data.admins.length === filteredData.length){
+    const filteredData = data.admins.filter(x => x.name.toLowerCase() !== adminName.toLowerCase())
+
+    if (data.admins.length === filteredData.length) {
         return res.status(404).send("No admin found")
     }
 
     data.admins = filteredData
     writeFile(data)
     res.status(200).send("Admin deleted sucessfully")
+})
+
+app.put("/admins/:name",(req,res)=>{
+    const adminName = req.params.name
+    let updatedAdmin = req.body
+    let data = readFile()
+    const index = data.admins.findIndex(x=>x.name === adminName)
+
+    if(index === -1){
+        return res.status(404).send("No admin found")
+    }
+
+    updatedAdmin.id = data.admins[index].id
+    data.admins[index] = updatedAdmin
+    writeFile(data)
+    res.status(201).send("Admin updated sucessfully")
 })
 
 app.listen("5000", () => {

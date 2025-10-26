@@ -50,18 +50,18 @@ router.delete("/:name", (req,res)=> {
     res.status(200).send("Item deleted sucessfully")
 })
 
-router.put("/:name",(req,res)=>{
-    const nonvegName = req.params.name
+router.put("/:id",(req,res)=>{
+    const nonvegId = req.params.id
     const updatedItem = req.body
     const data = readFile()
-    const index = data.nonveg.findIndex(x=> x.name === nonvegName)
+    const index = data.nonveg.findIndex(x=> x.id === Number(nonvegId))
     if(index === -1 || updatedItem.type !== "nonveg"){
-        return res.status(404).send(`No item found ${nonvegName} or check the type`)
+        return res.status(404).send(`No item found ${nonvegId} or check the type`)
     }
     updatedItem.id = data.nonveg[index].id
     data.nonveg[index] = updatedItem
     writeFile(data)
-    res.status(201).send(`Updated ${nonvegName} sucessfully`)
+    res.status(201).send(`Updated sucessfully`)
 })
 
 module.exports = router

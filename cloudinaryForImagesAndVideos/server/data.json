@@ -1,0 +1,26 @@
+{
+    "posts": [
+        {
+            "id": 1761681558158,
+            "img": [
+                {
+                    "url": "https://res.cloudinary.com/duocoiwyz/image/upload/v1761681547/v5lpsfpv9ln4dp4il2nu.jpg"
+                }
+            ]
+        },
+        {
+            "id": 1761681617394,
+            "img": [
+                {
+                    "url": "https://res.cloudinary.com/duocoiwyz/image/upload/v1761681608/nf736urineqok21kvgxs.jpg"
+                },
+                {
+                    "url": "https://res.cloudinary.com/duocoiwyz/image/upload/v1761681612/mtoikticjgttpvaljbhj.jpg"
+                },
+                {
+                    "url": "https://res.cloudinary.com/duocoiwyz/image/upload/v1761681614/eoesskgp009oadtbwq9h.jpg"
+                }
+            ]
+        }
+    ]
+}

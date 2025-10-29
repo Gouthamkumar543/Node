@@ -1,17 +1,17 @@
 import React from 'react'
 import { useState } from 'react'
-import { Modal, Form, Button } from "react-bootstrap"
+import { Modal, Form, Button, Carousel } from "react-bootstrap"
 import axios from "axios"
 import { useEffect } from 'react'
 
 const App = () => {
   const [images, setImages] = useState([])
   const [show, setShow] = useState(false)
-  const [data, setData] = useState()
+  const [data, setData] = useState([])
   useEffect(() => {
     axios.get("http://localhost:7000/images")
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setData(response.data)
       })
       .catch((err) => {
@@ -59,20 +59,31 @@ const App = () => {
           </Modal.Footer>
         </Form>
       </Modal>
-      {data?.map((x) => (
-        <div key={x.id} style={{ marginBottom: "30px" }}>
-          <h5>Recipe ID: {x.id}</h5>
-          {x.img.length > 1 ?
-            <img src={x.img[0]} alt="Recipe" style={{ width: "200px", margin: "10px", borderRadius: "8px" }}/>
-            :
-            x.img.map((url, idx) => {
-              return (
-                <img src={url.url} alt={`Recipe ${idx}`} style={{ height: "300px", objectFit: "cover" }} />
-              )
-            })
-          }
-        </div>
-      ))}
+      {
+        data.map((x) => {
+          return (
+            <>
+              {
+                x.img.length === 1 ?
+                  <div>
+                    <img src={x.img[0].url} alt='img' width={250} />
+                  </div> :
+                  <Carousel style={{width:550}}>
+                    {
+                      x.img.map((e) => {
+                        return (
+                          <Carousel.Item>
+                            <img src={e.url} alt='img' width={550}/>
+                          </Carousel.Item>
+                        )
+                      })
+                    }
+                  </Carousel>
+              }
+            </>
+          )
+        })
+      }
     </div>
   )
 }

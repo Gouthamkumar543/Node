@@ -44,7 +44,7 @@ const addRestaurant = async (req, res) => {
             category,
             vendorId: vendor._id,
             image: images
-        })
+        })        
         await newRestaurant.save()
         res.status(201).json({ message: "Restaurant saved successfully",images })
     } catch (err) {

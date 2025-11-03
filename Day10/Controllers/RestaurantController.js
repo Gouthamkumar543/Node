@@ -51,4 +51,56 @@ const restaurantController = async (req, res) => {
     }
 }
 
-module.exports = { restaurantController, uploads }
+const getData = async (req, res) => {
+    try {
+        const data = await restaurantSchema.find().populate("products")
+        if (!data) {
+            return res.status(404).json({ message: "no data found" })
+        }
+        res.status(200).json({ data })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+const singleResaurant = async (req, res) => {
+    const restaurantId = req.params.id
+    try {
+        const restaurantFound = await restaurantSchema.findById(restaurantId).populate("products")
+        if (!restaurantFound) {
+            return res.status(404).json({ message: "no data found" })
+        }
+        res.status(200).json(restaurantFound)
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+const deleteRestaurant = async (req, res) => {
+    const restaurantId = req.params.id
+    try {
+        await restaurantSchema.findByIdAndDelete(restaurantId)
+        res.status(200).json({ message: "deleted sucessfully" })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+const updateRestaurant = async (req, res) => {
+    const restaurantId = req.params.id
+    const { restaurantName, location } = req.body
+    const file = req.file
+    try {
+        const image = await cloudinary.uploader.upload(file.path)
+        await restaurantSchema.findByIdAndUpdate(restaurantId, { restaurantName, location, image: image.secure_url }, { new: true })
+        res.status(201).json({ message: "updated sucessfully" })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+module.exports = { restaurantController, uploads, getData, singleResaurant, deleteRestaurant ,updateRestaurant}

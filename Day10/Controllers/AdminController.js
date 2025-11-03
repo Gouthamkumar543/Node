@@ -71,8 +71,30 @@ const getSingleAdminData = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "internal server error" })
-
     }
 }
 
-module.exports = { signUpController, logInController, getData, getSingleAdminData }
+const deleteAdmin = async (req, res) => {
+    const adminId = req.params.id
+    try {
+        await adminSchema.findByIdAndDelete(adminId)
+        res.status(200).json({ message: "deleted sucessfully" })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+const updateAdmin = async (req, res) => {
+    const adminID = req.params.id
+    const { userName, email } = req.body
+    try {
+        await adminSchema.findByIdAndUpdate(adminID, { userName, email })
+        res.status(201).json({ message: "updated sucessfully" })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+module.exports = { signUpController, logInController, getData, getSingleAdminData, deleteAdmin, updateAdmin }

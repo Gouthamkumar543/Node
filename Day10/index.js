@@ -17,8 +17,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
 app.use("/admin", adminRouter)
-app.use("/admin", restaurantRouter)
-app.use("/restaurant", productRoute)
+app.use("/restaurant", restaurantRouter)
+app.use("/product", productRoute)
 
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);

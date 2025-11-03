@@ -50,4 +50,56 @@ const productController = async (req, res) => {
     }
 }
 
-module.exports = { productController, uploads }
+const getData = async (req, res) => {
+    try {
+        const data = await productSchema.find()
+        if (!data) {
+            return res.status(404).json({ message: "no data found" })
+        }
+        res.status(200).json({ data })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+const singleProduct = async (req, res) => {
+    const productId = req.params.id
+    try {
+        const productFound = await productSchema.findById(productId)
+        if (!productFound) {
+            return res.status(404).json({ message: "no data found" })
+        }
+        res.status(200).json(productFound)
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+const deleteProduct = async (req, res) => {
+    const productId = req.params.id
+    try {
+        await productSchema.findByIdAndDelete(productId)
+        res.status(200).json({ message: "deleted sucessfully" })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+const updateProduct = async (req, res) => {
+    const productId = req.params.id
+    const { name, price } = req.body
+    const file = req.file
+    try {
+        const image = await cloudinary.uploader.upload(file.path)
+        await productSchema.findByIdAndUpdate(productId, { name, price, image: image.secure_url }, { new: true })
+        res.status(201).json({ message: "updated sucessfully" })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "internal server error" })
+    }
+}
+
+module.exports = { productController, uploads, getData, singleProduct, deleteProduct, updateProduct }
